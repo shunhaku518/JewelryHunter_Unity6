@@ -1,0 +1,10 @@
+diff a/Assets/Animations/PlayerJump.anim b/Assets/Animations/PlayerJump.anim	(rejected hunks)
+@@ -22,7 +22,7 @@
+     curve:
+     - time: 0
+       value: {fileID: -2148297338061115885, guid: 0506fd680b4fb5d4fb1c483b5ab6126f, type: 3}
+-    - time: 0.16666667
++    - time: 0.33333334
+       value: {fileID: -4578502275372033715, guid: ef198d5325b85fa40a6e1817242e0fa2, type: 3}
+     - time: 1
+       value: {fileID: -4578502275372033715, guid: ef198d5325b85fa40a6e1817242e0fa2, type: 3}
