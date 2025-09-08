@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     public GameObject nextButon; //ネクストボタン
 
     public Sprite gameClearSprite; //ゲームクリアの絵
+    public Sprite gameOverSprite; //ゲームオーバーの絵
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +33,18 @@ public class UIController : MonoBehaviour
             mainImage.GetComponent<Image>().sprite = gameClearSprite;
 
             retryButon.GetComponent<Button>().interactable = false;
+
+        }
+
+
+        else if (GameManager.gameState == "gameover")
+        {
+            buttonPanel.SetActive(true); //ボタンパネルの復活
+            mainImage.SetActive(true); //メイン画像の復活
+            //メイン画像オブジェクトのImageコンポーネントが所持している変数spriteに"ゲームオーバー"の絵を代入
+            mainImage.GetComponent<Image>().sprite = gameOverSprite;
+            //リトライボタンオブジェクトのButtonコンポーネントが所持している変数interactableを無効（ボタン機能を無効）
+            nextButon.GetComponent<Button>().interactable = false;
 
         }
      
