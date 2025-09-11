@@ -2,162 +2,166 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("ƒvƒŒƒCƒ„[‚Ì”\—Í’l")]
-    public float speed = 3.0f; //ƒvƒŒƒCƒ„[‚ÌƒXƒs[ƒh‚ğ’²®
-    public float jumpPower = 9.0f; //ƒWƒƒƒ“ƒv—Í
+    [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®èƒ½åŠ›å€¤")]
+    public float speed = 3.0f; //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ”ãƒ¼ãƒ‰ã‚’èª¿æ•´
+    public float jumpPower = 9.0f; //ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
 
-    [Header("’n–Ê”»’è‚Ì‘ÎÛƒŒƒCƒ„[")]
-    public LayerMask groundLayer; //’n–ÊƒŒƒCƒ„[‚ğw–¼‚·‚é‚½‚ß‚Ì•Ï”
+    [Header("åœ°é¢åˆ¤å®šã®å¯¾è±¡ãƒ¬ã‚¤ãƒ¤ãƒ¼")]
+    public LayerMask groundLayer; //åœ°é¢ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æŒ‡åã™ã‚‹ãŸã‚ã®å¤‰æ•°
 
-    Rigidbody2D rbody; //Player‚É‚Â‚¢‚Ä‚¢‚éRigidbody2D‚ğˆµ‚¤‚½‚ß‚Ì•Ï”
-    Animator animator; //AnimatorƒRƒ“ƒ|[ƒlƒ“ƒg‚ğˆµ‚¤‚½‚ß‚Ì•Ï”
+    Rigidbody2D rbody; //Playerã«ã¤ã„ã¦ã„ã‚‹Rigidbody2Dã‚’æ‰±ã†ãŸã‚ã®å¤‰æ•°
+    Animator animator; //Animatorã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æ‰±ã†ãŸã‚ã®å¤‰æ•°
 
-    float axisH; //“ü—Í‚Ì•ûŒü‚ğ‹L‰¯‚·‚é‚½‚ß‚Ì•Ï”
-    bool goJump = false; //ƒWƒƒƒ“ƒvƒtƒ‰ƒOitrue:^onAfalse:‹Uoff)
-    bool onGround = false; //’n–Ê‚É‚¢‚é‚©‚Ç‚¤‚©‚Ì”»’èi’n–Ê‚É‚¢‚éFtrueA’n–Ê‚É‚¢‚È‚¢Ffalsej
+    float axisH; //å…¥åŠ›ã®æ–¹å‘ã‚’è¨˜æ†¶ã™ã‚‹ãŸã‚ã®å¤‰æ•°
+    bool goJump = false; //ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°ï¼ˆtrue:çœŸonã€false:å½off)
+    bool onGround = false; //åœ°é¢ã«ã„ã‚‹ã‹ã©ã†ã‹ã®åˆ¤å®šï¼ˆåœ°é¢ã«ã„ã‚‹ï¼štrueã€åœ°é¢ã«ã„ãªã„ï¼šfalseï¼‰
 
     void Start()
     {
-        rbody = GetComponent<Rigidbody2D>(); //Player‚É‚Â‚¢‚Ä‚¢‚éƒRƒ“ƒ|[ƒlƒ“ƒgî•ñ‚ğæ“¾
+        rbody = GetComponent<Rigidbody2D>(); //Playerã«ã¤ã„ã¦ã„ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæƒ…å ±ã‚’å–å¾—
 
-        animator = GetComponent<Animator>();//AnimatorƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìî•ñ‚ğ‘ã“ü
+        animator = GetComponent<Animator>();//Animatorã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®æƒ…å ±ã‚’ä»£å…¥
     }
 
     void Update()
     {
-        //ƒQ[ƒ€‚ÌƒXƒe[ƒ^ƒX‚ªplaying‚Å‚È‚¢‚È‚ç
+        //ã‚²ãƒ¼ãƒ ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒplayingã§ãªã„ãªã‚‰
         if (GameManager.gameState != "playing")
         {
-            return; //‚»‚Ì1ƒtƒŒ[ƒ€‚ğ‹­§I—¹
+            return; //ãã®1ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å¼·åˆ¶çµ‚äº†
         }
 
-        //Velocity‚ÌŒ³‚Æ‚È‚é’l‚Ìæ“¾i‰E‚È‚ç1.0fA¶‚È‚ç-1.0fA‚È‚É‚à‚È‚¯‚ê‚Î0)
+
+        //Velocityã®å…ƒã¨ãªã‚‹å€¤ã®å–å¾—ï¼ˆå³ãªã‚‰1.0fã€å·¦ãªã‚‰-1.0fã€ãªã«ã‚‚ãªã‘ã‚Œã°0)
         axisH = Input.GetAxisRaw("Horizontal");
 
         if (axisH > 0)
         {
-            //‰E‚ğŒü‚­
+            //å³ã‚’å‘ã
             transform.localScale = new Vector3(1, 1, 1);
         }
         else if (axisH < 0)
         {
-            //¶‚ğŒü‚­
+            //å·¦ã‚’å‘ã
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        //GetButtonDownƒƒ\ƒbƒh¨ˆø”‚Éw’è‚µ‚½ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çtrue‚ğ•Ô‚·A‰Ÿ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îfalse‚ğ•Ô‚·
+        //GetButtonDownãƒ¡ã‚½ãƒƒãƒ‰â†’å¼•æ•°ã«æŒ‡å®šã—ãŸãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‚‰trueã‚’è¿”ã™ã€æŠ¼ã•ã‚Œã¦ã„ãªã‘ã‚Œã°falseã‚’è¿”ã™
         if (Input.GetButtonDown("Jump"))
         {
-            Jump(); //Jumpƒƒ\ƒbƒh‚Ì”­“®
+            Jump(); //Jumpãƒ¡ã‚½ãƒƒãƒ‰ã®ç™ºå‹•
         }
 
     }
 
-    //1•bŠÔ‚É50‰ñ(50fps)ŒJ‚è•Ô‚·‚æ‚¤‚É§Œä‚µ‚È‚ª‚çs‚¤ŒJ‚è•Ô‚µƒƒ\ƒbƒh
+    //1ç§’é–“ã«50å›(50fps)ç¹°ã‚Šè¿”ã™ã‚ˆã†ã«åˆ¶å¾¡ã—ãªãŒã‚‰è¡Œã†ç¹°ã‚Šè¿”ã—ãƒ¡ã‚½ãƒƒãƒ‰
     void FixedUpdate()
     {
-        //ƒQ[ƒ€‚ÌƒXƒe[ƒ^ƒX‚ªplaying‚Å‚È‚¢‚È‚ç
+        //ã‚²ãƒ¼ãƒ ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒplayingã§ãªã„ãªã‚‰
         if (GameManager.gameState != "playing")
         {
-            return; //‚»‚Ì1ƒtƒŒ[ƒ€‚ğ‹­§I—¹
+            return; //ãã®1ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å¼·åˆ¶çµ‚äº†
         }
 
-        //’n–Ê”»’è‚ğƒT[ƒNƒ‹ƒLƒƒƒXƒg‚Ås‚Á‚ÄA‚»‚ÌŒ‹‰Ê‚ğ•Ï”onGround‚É‘ã“ü
+        //åœ°é¢åˆ¤å®šã‚’ã‚µãƒ¼ã‚¯ãƒ«ã‚­ãƒ£ã‚¹ãƒˆã§è¡Œã£ã¦ã€ãã®çµæœã‚’å¤‰æ•°onGroundã«ä»£å…¥
         onGround = Physics2D.CircleCast(
-            transform.position,   //”­ËˆÊ’uƒvƒŒƒCƒ„[‚ÌˆÊ’uiŠî€“_j
-            0.2f,                   //’²¸‚·‚é‰~‚Ì”¼Œa
-            new Vector2(0, 1.0f),  //”­Ë•ûŒü ¦‰º•ûŒü
-            0,                      //”­Ë‹——£
-            groundLayer        //‘ÎÛ‚Æ‚È‚éƒŒƒCƒ„[î•ñ ¦LayerMask
+            transform.position,   //ç™ºå°„ä½ç½®ï¼ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ï¼ˆåŸºæº–ç‚¹ï¼‰
+            0.2f,                   //èª¿æŸ»ã™ã‚‹å††ã®åŠå¾„
+            new Vector2(0, 1.0f),  //ç™ºå°„æ–¹å‘ â€»ä¸‹æ–¹å‘
+            0,                      //ç™ºå°„è·é›¢
+            groundLayer        //å¯¾è±¡ã¨ãªã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ± â€»LayerMask
             );
 
-        //Velocity‚É’l‚ğ‘ã“ü
+        //Velocityã«å€¤ã‚’ä»£å…¥
         rbody.linearVelocity = new Vector2(axisH * speed, rbody.linearVelocity.y);
 
-        //ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ª—§‚Á‚½‚ç
+        //ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°ãŒç«‹ã£ãŸã‚‰
         if (goJump)
         {
-            //ƒWƒƒƒ“ƒv‚³‚¹‚é¨ƒvƒŒƒCƒ„[‚ğã‚É‰Ÿ‚µo‚·
+            //ã‚¸ãƒ£ãƒ³ãƒ—ã•ã›ã‚‹â†’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸Šã«æŠ¼ã—å‡ºã™
             rbody.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-            goJump = false; //ƒtƒ‰ƒO‚ğOFF‚É–ß‚·
+            goJump = false; //ãƒ•ãƒ©ã‚°ã‚’OFFã«æˆ»ã™
         }
 
-        //if (onGround) //’n–Ê‚Ìã‚É‚¢‚é
+        //if (onGround) //åœ°é¢ã®ä¸Šã«ã„ã‚‹æ™‚
         //{
-        if (axisH == 0) //¶‰E‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢
+        if (axisH == 0) //å·¦å³ãŒæŠ¼ã•ã‚Œã¦ã„ãªã„
         {
-            animator.SetBool("Run", false); //IdleƒAƒjƒ‚ÉØ‚è‘Ö‚¦
+            animator.SetBool("Run", false); //Idleã‚¢ãƒ‹ãƒ¡ã«åˆ‡ã‚Šæ›¿ãˆ
         }
-        else //¶‰E‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é
+        else //å·¦å³ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹
         {
-            animator.SetBool("Run", true); //RunƒAƒjƒ‚ÉØ‚è‘Ö‚¦
+            animator.SetBool("Run", true); //Runã‚¢ãƒ‹ãƒ¡ã«åˆ‡ã‚Šæ›¿ãˆ
         }
         //} 
     }
 
-    //ƒWƒƒƒ“ƒvƒ{ƒ^ƒ“‚ª‚¨‚³‚ê‚½‚ÉŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh
+    //ã‚¸ãƒ£ãƒ³ãƒ—ãƒœã‚¿ãƒ³ãŒãŠã•ã‚ŒãŸæ™‚ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     void Jump()
     {
         if (onGround)
         {
-            goJump = true; //ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ğON
+            goJump = true; //ã‚¸ãƒ£ãƒ³ãƒ—ãƒ•ãƒ©ã‚°ã‚’ON
             animator.SetTrigger("Jump");
         }
     }
 
-    //isTrigger“Á«‚ğ‚Á‚Ä‚¢‚éCollider‚Æ‚Ô‚Â‚©‚Á‚½‚çˆ—‚³‚ê‚é
-    void OnTriggerEnter2D(Collider2D collision)
+    //isTriggerç‰¹æ€§ã‚’ã‚‚ã£ã¦ã„ã‚‹Colliderã¨ã¶ã¤ã‹ã£ãŸã‚‰å‡¦ç†ã•ã‚Œã‚‹
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        //‚Ô‚Â‚©‚Á‚½‘Šè‚ª"Goal"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚½‚ç
-        //if(collision.gameObject.tag == "Goal")
+        //ã¶ã¤ã‹ã£ãŸç›¸æ‰‹ãŒ"Gaol"ã‚¿ã‚°ã‚’æŒã£ã¦ã„ãŸã‚‰
+        //if (collision.gameObject.tag == "Goal")
         if (collision.gameObject.CompareTag("Goal"))
         {
             GameManager.gameState = "gameclear";
-            Debug.Log("ƒS[ƒ‹‚ÉÚG‚µ‚½I");
+            Debug.Log("ã‚´ãƒ¼ãƒ«ã«æ¥è§¦ã—ãŸï¼");
             Goal();
         }
 
-        //‚Ô‚Â‚©‚Á‚½‘Šè‚ª"Dead"ƒ^ƒO‚ğ‚Á‚Ä‚¢‚½‚ç
+        //ã¶ã¤ã‹ã£ãŸç›¸æ‰‹ãŒ"Dead"ã‚¿ã‚°ã‚’æŒã£ã¦ã„ãŸã‚‰
         if (collision.gameObject.CompareTag("Dead"))
         {
             GameManager.gameState = "gameover";
-            Debug.Log("ƒQ[ƒ€ƒI[ƒo[I");
+            Debug.Log("ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ï¼");
             GameOver();
+        }
 
+        //ã‚¢ã‚¤ãƒ†ãƒ ã«è§¦ã‚ŒãŸã‚‰ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¹ã‚³ã‚¢ã«åŠ ç®—
+        if (collision.gameObject.CompareTag("ItemScore"))
+        {
+            GameManager.stageScore += collision.gameObject.GetComponent<ItemData>().value;
+            Destroy(collision.gameObject);
         }
     }
 
-    //ƒS[ƒ‹‚µ‚½‚Ìƒƒ\ƒbƒh
+    //ã‚´ãƒ¼ãƒ«ã—ãŸæ™‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
     public void Goal()
     {
-        animator.SetBool("Clear", true); //ƒNƒŠƒAƒAƒjƒ‚ÉØ‚è‘Ö‚¦
-        GameStop();@//ƒvƒŒƒCƒ„[‚ÌVelocity‚ğ~‚ß‚éƒƒ\ƒbƒh
+        animator.SetBool("Clear", true); //ã‚¯ãƒªã‚¢ã‚¢ãƒ‹ãƒ¡ã«åˆ‡ã‚Šæ›¿ãˆ
+        GameStop();ã€€//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Velocityã‚’æ­¢ã‚ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     }
 
-    //ƒQ[ƒ€ƒI[ƒo[‚Ì‚Ìƒƒ\ƒbƒh
+    //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã®æ™‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
     public void GameOver()
     {
-        animator.SetBool("Dead", true); //ƒfƒbƒhƒAƒjƒ‚ÉØ‚è‘Ö‚¦
+        animator.SetBool("Dead", true); //ãƒ‡ãƒƒãƒ‰ã‚¢ãƒ‹ãƒ¡ã«åˆ‡ã‚Šæ›¿ãˆ
         GameStop();
 
-        //“–‚½‚è”»’è‚ğ–³Œø‚É‚·‚é
+        //å½“ãŸã‚Šåˆ¤å®šã‚’ç„¡åŠ¹
         GetComponent<CapsuleCollider2D>().enabled = false;
 
-        //­‚µã‚É”ò‚Ñ’µ‚Ë‚³‚¹‚é
+        //å°‘ã—ä¸Šã«é£›ã³è·³ã­ã•ã›ã‚‹
         rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
 
-        //ƒvƒŒƒCƒ„[‚ğ3•bŒã‚É–•Á
-        Destroy(gameObject,3.0f);
-
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’3ç§’å¾Œã«æŠ¹æ¶ˆ
+        Destroy(gameObject, 3.0f);
     }
-
 
     void GameStop()
     {
-        //‘¬“x‚ğ0‚ÉƒŠƒZƒbƒg
-        //rbody.linearVelocity = new Vector2(0,0);
+        //é€Ÿåº¦ã‚’0ã«ãƒªã‚»ãƒƒãƒˆ
+        //rbody.linearVelocity = new Vector2(0, 0);
         rbody.linearVelocity = Vector2.zero;
     }
-
 
 }

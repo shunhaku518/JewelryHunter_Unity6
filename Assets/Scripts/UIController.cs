@@ -1,59 +1,78 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour
 {
-    public GameObject mainImage; //ƒAƒiƒEƒ“ƒX‚·‚é‰æ‘œ
-    public GameObject buttonPanel;@//ƒ{ƒ^ƒ“‚ğƒOƒ‹[ƒv‰»‚µ‚Ä‚¢‚éƒpƒlƒ‹
+    public GameObject mainImage; //ã‚¢ãƒŠã‚¦ãƒ³ã‚¹ã‚’ã™ã‚‹ç”»åƒ
+    public GameObject buttonPanel; //ãƒœã‚¿ãƒ³ã‚’ã‚°ãƒ«ãƒ¼ãƒ—åŒ–ã—ã¦ã„ã‚‹ãƒ‘ãƒãƒ«
 
-    public GameObject retryButon; //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“
-    public GameObject nextButon; //ƒlƒNƒXƒgƒ{ƒ^ƒ“
+    public GameObject retryButton; //ãƒªãƒˆãƒ©ã‚¤ãƒœã‚¿ãƒ³
+    public GameObject nextButton; //ãƒã‚¯ã‚¹ãƒˆãƒœã‚¿ãƒ³
 
-    public Sprite gameClearSprite; //ƒQ[ƒ€ƒNƒŠƒA‚ÌŠG
-    public Sprite gameOverSprite; //ƒQ[ƒ€ƒI[ƒo[‚ÌŠG
+    public Sprite gameClearSprite; //ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ã®çµµ
+    public Sprite gameOverSprite; //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã®çµµ
+
+    TimeController timeCnt; //TimeController.csã®å‚ç…§
+    public GameObject timeText;  //ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã‚ã‚‹TimeText
+
+    public GameObject scoreText; //ã‚¹ã‚³ã‚¢ãƒ†ã‚­ã‚¹ãƒˆ
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        buttonPanel.SetActive(false); //‘¶İ‚ğ”ñ•\¦
+        timeCnt = GetComponent<TimeController>(); 
 
-        //ŠÔ·‚Åƒƒ\ƒbƒh‚ğ”­“®
-        Invoke("InactiveImage" , 1.0f);
+        buttonPanel.SetActive(false); //å­˜åœ¨ã‚’éè¡¨ç¤º
+
+        //æ™‚é–“å·®ã§ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç™ºå‹•
+        Invoke("InactiveImage",1.0f);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.gameState == "gameclear")
+        if(GameManager.gameState == "gameclear")
         {
-            buttonPanel.SetActive(true); //ƒ{ƒ^ƒ“ƒpƒlƒ‹‚Ì•œŠˆ
-            mainImage.SetActive(true); //ƒƒCƒ“‰æ‘œ‚Ì•œŠˆ
-            //ƒƒCƒ“‰æ‘œƒIƒuƒWƒFƒNƒg‚ÌImageƒRƒ“ƒ|[ƒlƒ“ƒg‚ªŠ‚µ‚Ä‚¢‚é•Ï”sprite‚É"ƒXƒe[ƒWƒNƒŠƒA"‚ÌŠG‚ğ‘ã“ü
+            buttonPanel.SetActive(true); //ãƒœã‚¿ãƒ³ãƒ‘ãƒãƒ«ã®å¾©æ´»
+            mainImage.SetActive(true); //ãƒ¡ã‚¤ãƒ³ç”»åƒã®å¾©æ´»
+            //ãƒ¡ã‚¤ãƒ³ç”»åƒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Imageã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒæ‰€æŒã—ã¦ã„ã‚‹å¤‰æ•°sprite ã« â€ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢â€ã®çµµã‚’ä»£å…¥
             mainImage.GetComponent<Image>().sprite = gameClearSprite;
-
-            retryButon.GetComponent<Button>().interactable = false;
-
+            //ãƒªãƒˆãƒ©ã‚¤ãƒœã‚¿ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Buttonã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒæ‰€æŒã—ã¦ã„ã‚‹å¤‰æ•°interactableã‚’ç„¡åŠ¹ï¼ˆãƒœã‚¿ãƒ³æ©Ÿèƒ½ã‚’ç„¡åŠ¹ï¼‰
+            retryButton.GetComponent<Button>().interactable = false;
         }
-
-
         else if (GameManager.gameState == "gameover")
         {
-            buttonPanel.SetActive(true); //ƒ{ƒ^ƒ“ƒpƒlƒ‹‚Ì•œŠˆ
-            mainImage.SetActive(true); //ƒƒCƒ“‰æ‘œ‚Ì•œŠˆ
-            //ƒƒCƒ“‰æ‘œƒIƒuƒWƒFƒNƒg‚ÌImageƒRƒ“ƒ|[ƒlƒ“ƒg‚ªŠ‚µ‚Ä‚¢‚é•Ï”sprite‚É"ƒQ[ƒ€ƒI[ƒo["‚ÌŠG‚ğ‘ã“ü
+            buttonPanel.SetActive(true); //ãƒœã‚¿ãƒ³ãƒ‘ãƒãƒ«ã®å¾©æ´»
+            mainImage.SetActive(true); //ãƒ¡ã‚¤ãƒ³ç”»åƒã®å¾©æ´»
+            //ãƒ¡ã‚¤ãƒ³ç”»åƒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Imageã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒæ‰€æŒã—ã¦ã„ã‚‹å¤‰æ•°sprite ã« â€ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼â€ã®çµµã‚’ä»£å…¥
             mainImage.GetComponent<Image>().sprite = gameOverSprite;
-            //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“ƒIƒuƒWƒFƒNƒg‚ÌButtonƒRƒ“ƒ|[ƒlƒ“ƒg‚ªŠ‚µ‚Ä‚¢‚é•Ï”interactable‚ğ–³Œøiƒ{ƒ^ƒ“‹@”\‚ğ–³Œøj
-            nextButon.GetComponent<Button>().interactable = false;
-
+            //ãƒã‚¯ã‚¹ãƒˆãƒœã‚¿ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®Buttonã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒæ‰€æŒã—ã¦ã„ã‚‹å¤‰æ•°interactableã‚’ç„¡åŠ¹ï¼ˆãƒœã‚¿ãƒ³æ©Ÿèƒ½ã‚’ç„¡åŠ¹ï¼‰
+            nextButton.GetComponent<Button>().interactable = false;
         }
-     
+        else if(GameManager.gameState == "playing")
+        {
+            //ã„ã£ãŸã‚“displayTimeã®æ•°å­—ã‚’å¤‰æ•°timesã«æ¸¡ã™
+            float times = timeCnt.displayTime;
+            timeText.GetComponent<TextMeshProUGUI>().text = Mathf.Ceil(times).ToString();
+        }
     }
 
-    //ƒƒCƒ“‰æ‘œ‚ğ”ñ•\¦‚·‚é‚½‚ß‚¾‚¯‚Ìƒƒ\ƒbƒh
+    //ãƒ¡ã‚¤ãƒ³ç”»åƒã‚’éè¡¨ç¤ºã™ã‚‹ãŸã‚ã ã‘ã®ãƒ¡ã‚½ãƒƒãƒ‰
     void InactiveImage()
     {
         mainImage.SetActive(false);
     }
+
+    //ã‚¹ã‚³ã‚¢ãƒœãƒ¼ãƒ‰ã‚’æ›´æ–°
+    void UpdataScore()
+    {
+        int score = GameManager.stageScore + GameManager.totalScore;
+        scoreText.GetComponent<TextMeshProUGUI>().text = score.ToString();
+    }
+
+
 
 }

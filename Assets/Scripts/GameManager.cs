@@ -2,24 +2,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static string gameState; //静的メンバ
+    public static string gameState;
 
-    //Startより前に処理される
-    void Awake()
-    {
-        //ゲームの初期状態をplaying
-        gameState = "playing";
-    }
+    public static int totalScore; //繧ｲ繝ｼ繝蜈ｨ闊ｬ繧帝壹＠縺ｦ縺ｮ繧ｹ繧ｳ繧｢
+    public static int stageScore; //縺昴�ｮ繧ｹ繝�繝ｼ繧ｸ縺ｫ迯ｲ蠕励＠縺溘せ繧ｳ繧｢
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        
+        //繧ｲ繝ｼ繝縺ｮ蛻晄悄迥ｶ諷九ｒplaying
+        gameState = "playing";
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(gameState);
     }
 }
